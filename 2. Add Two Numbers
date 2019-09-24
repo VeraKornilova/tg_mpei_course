@@ -1,0 +1,35 @@
+//https://leetcode.com/problems/add-two-numbers/submissions/
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+      ListNode *s = NULL;
+      ListNode **s2 = &s;
+      int k = 0;
+      while((l1 != NULL) || (l2 != NULL)||k>0)
+      {
+         int sum = 0;
+         if(l1 != NULL)
+         {
+            sum += l1->val;
+            l1 = l1->next;
+         }
+          
+         if(l2 != NULL)
+         {
+            sum += l2->val;
+            l2 = l2->next;
+         }
+          
+         sum+=k;
+         k = sum / 10;
+         *s2 = new ListNode(sum % 10);
+         s2=&((*s2)->next);
+      }
+        
+      if (k > 0){
+      *s2 = new ListNode(k);
+     }
+        
+   return (s);
+   }
+};
