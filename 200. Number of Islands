@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+class Solution {
+public:
+    int arr[1024][1024];
+    
+    void Dre(vector<vector<char>>& grid, int i, int j)
+    {
+        if ((i < grid.size()) && (i >= 0) && (j < grid[0].size()) && (j >= 0) && (grid[i][j] == '1'))
+        {
+           grid[i][j] = '0';
+            arr[i][j] = 1;
+            Dre(grid, i + 1, j);
+            Dre(grid, i - 1, j);
+            Dre(grid, i, j + 1);
+            Dre(grid, i, j - 1);
+        }
+        return;
+    }
+
+    int numIslands(vector<vector<char>>& grid) {
+        if (grid.size() == 0)
+            return 0;
+        else
+        {
+          int am = 0;
+          int m = grid.size();
+          int n = grid[0].size();
+  
+          for (int i = 0; i < m; i++)
+              for (int j = 0; j < n; j++)
+                  arr[i][j] = 0;
+        
+          for (int i = 0; i < m; i++)
+              for (int j = 0; j < n; j++)
+                  if ((grid[i][j] == '1') && (arr[i][j] == 0))
+                  {
+                      ++am;
+                      Dre(grid,  i, j);
+                  }      
+         return am;
+        }
+    }                  
+                  
+};       
