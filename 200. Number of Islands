@@ -1,4 +1,4 @@
-//https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+//https://leetcode.com/problems/number-of-islands/
 class Solution {
 public:
     int arr[1024][1024];
