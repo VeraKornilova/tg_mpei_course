@@ -1,0 +1,23 @@
+//https://leetcode.com/problems/pascals-triangle/
+class Solution {
+public:
+     unsigned boom(int n,int k) {
+	    if (k>n/2) k=n-k;
+	    if (k==1)  return n;
+	    if (k==0)  return 1;
+	    return boom(n-1,k) + boom(n-1,k-1);
+    }
+    
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> d;
+        for(int i = 0; i < numRows; i++){
+            vector <int> temp;
+            for(int j = 0; j < i + 1; j++){
+                temp.push_back(boom(i, j));
+            }
+            d.push_back(temp);
+        }
+        return d;
+    }
+    
+};
