@@ -1,0 +1,55 @@
+//https://leetcode.com/problems/rotting-oranges/
+class Solution {
+public:
+    int x[4] = {0, 0, -1, 1};
+    int y[4] = {1, -1, 0, 0};
+    
+    bool check(vector<vector<int>> &grid, int i, int j) {
+        int m = grid.size();
+        int n = grid[0].size();
+        return i >= 0 && i < m && j >= 0 && j < n && grid[i][j] == 1;
+    }
+    
+    
+    int orangesRotting(vector<vector<int>>& grid) {
+        if (grid.empty() || grid[0].empty())
+            return 0;
+        
+        vector<vector<int>> buf(grid.begin(), grid.end());
+        
+        queue<pair<int, int>> q;
+        int cnt = 0;
+        for (int i = 0; i < buf.size(); i++)
+            for (int j = 0; j < buf[0].size(); j++) {
+                if (buf[i][j] == 1)
+                    ++cnt;
+                else if (buf[i][j] == 2)
+                    q.push(make_pair(i, j));
+            }
+        if (!cnt)
+            return 0;
+        int res = 0;
+        while (!q.empty()) {
+            int size = q.size();
+            while(size--) {
+                auto temp = q.front();
+                q.pop();
+                for (int i = 0; i < 4; i++) {
+                    int new_x = temp.first + x[i];
+                    int new_y = temp.second + y[i];
+                    if(check(buf, new_x, new_y)) {
+                        q.push(make_pair(new_x, new_y));
+                        buf[new_x][new_y] = 2;
+                        --cnt;
+                    }
+                }
+            } 
+            if (!q.empty())
+                ++res;
+        }
+        if(!cnt)
+            return res;
+        return -1;
+    }
+        
+};
