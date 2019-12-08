@@ -1,0 +1,41 @@
+//https://leetcode.com/problems/pacific-atlantic-water-flow/
+class Solution {
+public:
+    
+    void grid_sol(string ag, vector<vector<int>>& matrix, vector<vector<string>>& grid_s, int x, int y) {
+        if (grid_s[x][y] == ag || grid_s[x][y] == "pa" || grid_s[x][y] == "ap")
+            return;
+        grid_s[x][y] += ag;
+        if (x > 0 && matrix[x - 1][y] >= matrix[x][y]) 
+            grid_sol(ag, matrix, grid_s, x - 1, y);
+        if (y > 0 && matrix[x][y - 1] >= matrix[x][y]) 
+            grid_sol(ag, matrix, grid_s, x, y - 1);
+        if ((x < grid_s.size() - 1) && matrix[x + 1][y] >= matrix[x][y]) 
+            grid_sol(ag, matrix, grid_s, x + 1, y);
+        if ((y < grid_s[0].size() - 1) && matrix[x][y + 1] >= matrix[x][y]) 
+            grid_sol(ag, matrix, grid_s, x, y + 1);
+    }
+    
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        if (matrix.size() == 0 || matrix[0].size() == 0)
+            return {};
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<string>> vec(m, vector<string>(n, ""));
+        for (int i = 0; i < m; i++){
+            grid_sol("p", matrix, vec, i, 0);
+            grid_sol("a", matrix, vec, i, n - 1);
+        }
+        for (int i = 0; i < n; i++){
+            grid_sol("p", matrix, vec, 0, i);
+            grid_sol("a", matrix, vec, m - 1, i);
+        }
+        
+        vector<vector<int>> res;
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                if (vec[i][j] == "pa" || vec[i][j] == "ap")
+                    res.push_back({i, j});
+        return res;
+        
+    }
+};
