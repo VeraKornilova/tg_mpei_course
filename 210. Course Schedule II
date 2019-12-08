@@ -1,0 +1,46 @@
+//https://leetcode.com/problems/course-schedule-ii/
+enum color
+{
+  WHITE, 
+  GRAY, 
+  BLACK 
+};
+class Solution {
+  queue<int> courses;
+public:
+    bool checkedCourse(vector<vector<int>>& req, int Course,vector<color> &visited )
+    {
+      visited[Course] = GRAY;
+      for(int nextCourse: req[Course])
+      {
+        if(visited[nextCourse] == GRAY)
+          return false;
+        if(visited[nextCourse] == WHITE && !checkedCourse(req, nextCourse, visited))
+          return false;
+      }
+      visited[Course] = BLACK;
+      courses.push(Course);      
+      return true;
+    }
+  
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+      vector<int> result;
+      vector<color> visited(numCourses,WHITE);
+      vector<vector<int>> reqList(numCourses,vector<int>());
+      
+      for(vector<int> e: prerequisites)
+        reqList[e[0]].push_back(e[1]);
+      
+      for(int i=0; i<numCourses; ++i)
+      {        
+        if(visited[i] == WHITE && !checkedCourse(reqList,i, visited))
+          return result;
+      }
+      while(!courses.empty())
+      {
+        result.push_back(courses.front());
+        courses.pop();
+      }
+      return result;
+    }
+};
