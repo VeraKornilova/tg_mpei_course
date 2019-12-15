@@ -1,0 +1,60 @@
+//https://leetcode.com/problems/add-one-row-to-tree/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int v, int d) 
+    {
+        if (d < 1 || root == nullptr) return root;
+        if (d == 1)    
+        {
+            TreeNode* nroot = new TreeNode(v);
+            nroot -> left = root;
+            return nroot;
+        }
+        
+        queue<TreeNode*> tque;
+        tque.push(root);
+        tque.push(nullptr);
+        int cntd = 1;
+        while (cntd < d - 1 && !tque.empty())
+        {
+            TreeNode* tmp = tque.front();
+            tque.pop();
+            if (tmp == nullptr)
+            {
+                cntd++;
+                if (!tque.empty())
+                    tque.push(nullptr);
+                continue;
+            }
+            
+            if (tmp -> left != nullptr) tque.push(tmp -> left);
+            if (tmp -> right != nullptr) tque.push(tmp -> right);
+        }
+        
+        while (!tque.empty())
+        {
+            TreeNode* tmpl = new TreeNode(v);
+            TreeNode* tmpr = new TreeNode(v);
+            TreeNode* tmp = tque.front();
+            tque.pop();
+            
+            if (tmp != nullptr)
+            {
+                tmpl -> left = tmp -> left;
+                tmpr -> right = tmp -> right;
+                tmp -> left = tmpl;
+                tmp -> right = tmpr;
+            }
+        }
+        return root;
+    }
+};
