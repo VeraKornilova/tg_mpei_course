@@ -1,0 +1,63 @@
+//https://leetcode.com/problems/ugly-number-ii/
+class Solution {
+public:
+    int DeleteMin(vector<long long>& nums){
+        long long min = nums[0];
+        nums[0]=nums[nums.size()-1];
+        nums.erase(nums.end()-1);
+        Down(nums,0);
+        return min;
+    }
+    
+    void Insert(vector<long long>& nums, long long n){
+        nums.push_back(n);
+        Up(nums,nums.size()-1);
+    }
+    
+    void Down(vector <long long>& nums, size_t i){
+        while(2*i+1<nums.size()){
+            size_t l = 2*i+1;
+            size_t r = 2*i+2;
+            size_t max = l;
+            if(r<nums.size() && nums[r]<nums[max]){
+                max=r;
+             }
+            if(nums[i]<=nums[max]){
+                break;
+            }
+            swap(nums[i], nums[max]);
+            i= max;
+        }
+    }
+    
+    void Up(vector <long long>& nums, size_t i){
+        size_t p=(i-1)/2;
+        while(i>0 && nums[p]>nums[i]){
+            swap(nums[p], nums[i]);
+            i=p;
+            p=(i-1)/2;
+        }
+    }
+    
+    int nthUglyNumber(int n) {
+        vector <long long> nums = {1};
+        vector <long long> k= {2,3,5};
+        unordered_set<long long> s;
+        long long res=0;
+        long long cer = 1;
+        s.insert(1);
+        while(cer<=n){
+            res=DeleteMin(nums);
+            for(long long i:k){
+                if(s.count(res*i)==0){
+                    Insert(nums,res*i);
+                    s.insert(res*i);
+                }
+            }
+            ++cer;
+        }
+        return res;
+    }
+    
+    
+};
